@@ -65,3 +65,6 @@ RMSE2 = sqrt(SSE2/nrow(FluTest))
 RMSE2
 
 ?arima
+
+
+
