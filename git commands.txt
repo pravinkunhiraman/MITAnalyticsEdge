@@ -3,3 +3,6 @@ git status
 git add .
 git commit -m "Commit message"
 git push origin master
+
+Pull from master to sync:
+git pull origin master
