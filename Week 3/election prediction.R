@@ -23,7 +23,8 @@ polling$SurveyUSA = imputed_edx$SurveyUSA
 summary(polling)
 
 Train = subset(polling, Year == 2004 | Year == 2008)
-Test = subset(polling, Year = 2012)
+Test = subset(polling, Year == 2012)
+str(Test)
 
 table(Train$Republican) # Baseline model
 table(sign(Train$Rasmussen)) # Smart baseline model based on Rasmussen poll results
@@ -42,3 +43,10 @@ summary(mod2) # AIC = 21.374
 
 pred2 = predict(mod2, type = "response")
 table(Train$Republican,pred2>=0.5)
+
+# Working with the Testing set
+
+table(Test$Republican, sign(Test$Rasmussen))
+TestPrediction = predict(mod2, newdata = Test, type = "response")
+table(Test$Republican, TestPrediction > 0.5)
+subset(Test, TestPrediction > 0.5 & Republican == 0)
