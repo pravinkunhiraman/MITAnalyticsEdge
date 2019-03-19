@@ -39,9 +39,32 @@ prp(TreeModel2)
 TreePredict2 = predict(TreeModel2, data=statedata)
 sum((TreePredict2 - statedata$Life.Exp)^2)
 
+install.packages("caret")
+install.packages("e1071")
 library(caret)
 library(e1071)
 
 set.seed(111)
 tr.control = trainControl(method = "cv", number = 10)
-cp.grid = expand.grid(.cp = (0:10)*0.001)
+cp.grid = expand.grid(.cp = (0:50)*0.01)
+tr = train(Life.Exp ~ ., data = statedata, method = "rpart", trControl = tr.control, tuneGrid = cp.grid)
+tr
+
+BestTree = rpart(Life.Exp ~ ., data = statedata, cp=0.11)
+prp(BestTree)
+PredictTree = predict(BestTree,data=statedata)
+sum((PredictTree - statedata$Life.Exp)^2)
+
+
+set.seed(111)
+tr.control = trainControl(method = "cv", number = 10)
+cp.grid = expand.grid(.cp = (0:50)*0.01)
+tr = train(Life.Exp ~ Area, data = statedata, method = "rpart", trControl = tr.control, tuneGrid = cp.grid)
+tr
+BestTree2 = rpart(Life.Exp ~ Area, data = statedata, cp=0.01)
+prp(BestTree2)
+
+51e+3
+
+PredictTree2 = predict(BestTree2,data=statedata)
+sum((PredictTree2 - statedata$Life.Exp)^2)
