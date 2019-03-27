@@ -94,3 +94,34 @@ table(test$spam, pred.RF>0.5)
 (1291+385)/nrow(test)
 ROCRpred = prediction(pred.RF, test$spam)
 as.numeric(performance(ROCRpred,"auc")@y.values)
+
+
+# HW 4 begins here 
+
+wordCount = rowSums(as.matrix(dtm))
+hist(wordCount)
+hist(log(wordCount))
+emailsSparse$logWordCount = log(wordCount)
+boxplot(emailsSparse$logWordCount~emailsSparse$spam)
+
+train2 = subset(emailsSparse, sample == T)
+test2 = subset(emailsSparse, sample == F)
+
+spam2CART = rpart(spam ~ ., data = train2, method = "class")
+set.seed(123)
+spam2RF = randomForest(spam ~ ., data = train2, type = "prob")
+prp(spam2CART)
+
+pred2.CART = predict(spam2CART, newdata = test2)
+CART.pred = pred2.CART[,2]
+table(test2$spam, CART.pred > 0.5)
+(1214+384)/nrow(test2)
+ROCRPred = prediction(CART.pred,test2$spam)
+as.numeric(performance(ROCRPred, "auc")@y.values)
+
+RF.pred = predict(spam2RF, newdata = test2, type = "prob")
+pred.RF = RF.pred[,2]
+table(test2$spam, pred.RF > 0.5)
+(1298+383)/nrow(test2)
+ROCRpred = prediction(pred.RF,test2$spam)
+as.numeric(performance(ROCRpred, "auc")@y.values)
