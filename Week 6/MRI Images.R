@@ -47,6 +47,7 @@ install.packages("flexcust")
 library(flexclust)
 
 KMC.kcca = as.kcca(KMC, healthyVector)
-tumorClusters = predict(KMC.kcca, tumorVector)
+tumorClusters = predict(KMC.kcca, newdata = tumorVector)
 dim(tumorClusters) = c(nrow(tumorMatrix), ncol(tumorMatrix))
-image(tumorClusters, axes = F, col =rainbow(k))
+image(tumorClusters, axes = F, col = grey(seq(0,1,length=256)))
+ 
